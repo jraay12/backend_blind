@@ -11,7 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::create('contacts', function (Blueprint $table) {
+            $table->id();
+            $table->string('user_id');
+            $table->string('address_id');
+            $table->string('name');
+            $table->string('contact_number');
+            $table->timestamps();
+        });
     }
 
     /**
