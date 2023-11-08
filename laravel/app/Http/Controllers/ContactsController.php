@@ -54,8 +54,8 @@ class ContactsController extends Controller
 
     public function contactDetails($id){
         
-        $contactDetails = Contact::where('user_id', $id)->with('address')->get();
-        $countContact = Contact::where('user_id', $id)->count();
+        $contactDetails = Contacts::where('user_id', $id)->with('address')->get();
+        $countContact = Contacts::where('user_id', $id)->count();
 
         return response()->json([
             'contacts' => $contactDetails,

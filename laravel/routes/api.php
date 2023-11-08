@@ -23,23 +23,18 @@ use App\Http\Middleware\UserPermission;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-// Route::group(['middleware' => 'auth:sanctum'], function () {
-//     Route::group(['middleware' => ['permission']], function(){
-//         Route::post("/create", [UserController::class, "create"]);
-//         Route::get("/total-user", [UserController::class, "userDetails"]);
-    
-//      });
-
-//      Route::group(['middleware' => ['userPermission']], function(){
-//         Route::post("/add-contacts", [ContactsController::class, "contacts"]);
-//         Route::get("/contacts-details/{id}", [ContactsController::class, "contactDetails"]);
-//     });
-// });
-
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::group(['middleware' => ['adminPermission']], function(){
         Route::post("/create", [UserController::class, "create"]);
         Route::get("/total-user", [UserController::class, "userDetails"]);
+     });
+     Route::group(['middleware' => ['userPermission']], function(){
         Route::post("/add-contacts", [ContactsController::class, "contacts"]);
         Route::get("/contacts-details/{id}", [ContactsController::class, "contactDetails"]);
+    });
+});
+
+ 
 
 
 

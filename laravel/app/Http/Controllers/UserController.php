@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Address;
 
@@ -60,4 +61,53 @@ class UserController extends Controller
             
         ]);
     }
+
+    public function login(Request $request)
+    {
+        $responseData = [
+            'status' => 'fail',
+            'message' => 'Authentication Failed',
+            'data' => null
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string'
+        ]);
+
+        
+        if ($validator->fails()) {
+            $responseData['message'] = $validator->errors()->first();
+            return response($responseData, 400);
+        }
+
+    
+        $credentials = request(['email', 'password']);
+
+        try {
+
+            if (Auth::attempt($credentials)) {
+
+                $user = $request->user();
+    
+                $user->tokens()->delete();
+                
+                $responseData = [
+                    'status' => 'success',
+                    'message' => 'Successful Login',
+                    'data' => [
+                        'token' => $user->createToken(Auth::user())->plainTextToken,
+                        'user' => $user
+                    ]
+                ];
+                return response($responseData, 200);
+            }
+
+            return response($responseData, 400);
+        }
+        catch(\Throwable $th) {
+            throw $th;
+        }
+    }
+
 }
