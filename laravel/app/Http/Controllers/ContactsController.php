@@ -23,7 +23,7 @@ class ContactsController extends Controller
         ]);
     
         if($validator->fails()) {
-            return response(['message' => $validator->errors()->first()]);
+            return response(['message' => $validator->errors()->first()], 400);
         }
     
         // Check if the user has reached the contact limit
@@ -31,7 +31,7 @@ class ContactsController extends Controller
         $userContactsCount = Contacts::where('user_id', $request['user_id'])->count();
     
         if ($userContactsCount >= $contactLimit){
-            return response()->json(['message' => 'Contact Limit Exceed']);
+            return response()->json(['message' => 'Contact Limit Exceed'], 400);
         }
     
         $contactAddress = Address::firstOrCreate([
