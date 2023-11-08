@@ -53,12 +53,12 @@ class UserController extends Controller
 
     }
 
-    public function userDetails() {  
-        $totalUser = User::with('address')->get();
-
+    public function userDetails() {
+        $totalUser = User::with('address')->where('id', '!=', 1)->get();
+        $totalCount = User::where('id', '!=', 1)->count();
         return response()->json([
             "User" => $totalUser,
-            
+            "Count" => $totalCount
         ]);
     }
 
