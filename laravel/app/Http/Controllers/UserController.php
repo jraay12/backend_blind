@@ -130,7 +130,7 @@ class UserController extends Controller
     }
 
     public function userContactsDetails($userId) {
-        $userContactDetails = Contacts::where('user_id', '=', $userId)->get();
+        $userContactDetails = Contacts::with('address')->where('user_id', '=', $userId)->get();
     
         return response()->json([
             'User' => $userContactDetails
