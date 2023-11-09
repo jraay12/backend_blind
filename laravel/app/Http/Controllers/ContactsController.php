@@ -64,4 +64,21 @@ class ContactsController extends Controller
 
        
     }
+
+
+    public function destroy($id){
+        $user = Contacts::find($id);
+
+        if(!$user){
+            return response()->json(["message" => "Contacts Not Found"], 404);
+        }
+
+        if ($user) {
+            $user->delete();
+            return response()->json(["message" => "successfully deleted contacts"], 200);
+        } else {
+            return response()->json(["message" => "failed to delete contacts"], 400);;
+        }
+
+    }
 }
