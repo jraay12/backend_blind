@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Address;
+use App\Models\Contacts;
+
 
 class UserController extends Controller
 {
@@ -127,6 +129,13 @@ class UserController extends Controller
 
     }
 
+    public function userContactsDetails($userId) {
+        $userContactDetails = Contacts::where('user_id', '=', $userId)->get();
+    
+        return response()->json([
+            'User' => $userContactDetails
+        ]);
+    }
 
 //     public function update(Request $request, $id)
 // {

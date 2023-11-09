@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post("/create", [UserController::class, "create"]);
         Route::get("/total-user", [UserController::class, "userDetails"]);
         Route::delete("/delete/{id}", [UserController::class, "destroy"]);
+        Route::get("/user-contacts/{userId}", [UserController::class, "userContactsDetails"]);
         Route::patch("/update/{id}", [UserController::class, "update"]);
      });
      Route::group(['middleware' => ['userPermission']], function(){
