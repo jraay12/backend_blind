@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 });
 
  
+Route::get("/user-number/{userId}", [UserController::class, "userContactsDetails"]);
 
 
 
@@ -50,5 +51,5 @@ Route::get('/unauthorized', function () {
     ], 404);
 })->name('unauthorized');
 
-
+Route::get('/contacts/{id}', [ContactsController::class, "getContacts"]);
 Route::post("/login", [UserController:: class, "login"]);

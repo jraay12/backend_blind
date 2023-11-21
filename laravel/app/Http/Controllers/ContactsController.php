@@ -80,5 +80,5 @@ class ContactsController extends Controller
             return response()->json(["message" => "failed to delete contacts"], 400);;
         }
 
-    }
+    } 
 }
