@@ -47,6 +47,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    protected $primaryKey = 'id';
+
     public function address()
     {
         return $this->belongsTo(Address::class);

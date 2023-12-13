@@ -112,6 +112,44 @@ class UserController extends Controller
         }
     }
 
+   public function update(Request $request, $id){
+        
+    $user = User::find($id);
+
+    if(!$user){
+        return response()->json(["message" => "User not Found"], 404);
+    }
+    $validator = Validator::make($request->all(), [
+        // Update validation rules based on fillable fields
+        'name' => 'nullable|string',
+        'email' => 'nullable|email|unique:users,email,'.$user->id, // Ensure unique email excluding current user
+        'password' => 'nullable|string|min:6',
+        'address_id' => 'nullable|integer|exists:addresses,id', // Add validations for other address fields if updating them individually
+        'contact_number' => 'nullable|string',
+        'role' => 'nullable|string', // Add validation logic for role updates if desired
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            "message" => $validator->errors()->first(),
+        ], 400);
+    }
+
+
+    $user->update(array_intersect(
+        $request->all()
+    ));
+
+    // Save updated user
+    $user->save();
+
+    // Return updated user data
+    return response()->json([
+        "message" => "User updated successfully",
+        "user" => $user,
+    ], 200);
+   }
+
     public function destroy($id)
     {
         $user = User::find($id);
@@ -142,7 +180,6 @@ class UserController extends Controller
 //     $user = User::find($id);
 
 //     $updated = false;
-
 //     if ($request->filled('name')) {
 //         $user->name = $request->input('name');
 //         $updated = true;
