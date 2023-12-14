@@ -81,4 +81,30 @@ class ContactsController extends Controller
         }
 
     } 
+
+
+    public function updateContacts(Request $request, $id){
+        $contacts = Contacts::find($id);
+
+        if(!$contacts){
+            return response()->json(["message" => "Contacts Not Found"], 404);
+        }
+
+        $validator = Validator::make($request->all(),[
+            "user_id" => "nullable|integer|exist:users,id",
+            "address_id" => "nullable|integer|exist:addresses,id",
+            "name" => "nullable|string",
+            "contact_umber" => "nullable|string"
+        ]);
+
+        if($validator->fails()){
+            return response()->json(["message" => $validator->errors()->first()], 400);
+        }
+
+        $contacts->update(array_intersect($request->all()));
+        $contacts->save();
+
+
+        return response()->json(["message" => "successfully updated", "contacts" => $contacts], 200);
+    }
 }

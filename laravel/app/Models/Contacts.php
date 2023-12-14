@@ -17,6 +17,8 @@ class Contacts extends Model
     ];
     
 
+    protected $primaryKey = 'id';
+
     public function address(){
         return $this->belongsTo(Address::class);
     }
