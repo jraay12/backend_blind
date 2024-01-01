@@ -59,4 +59,4 @@ Route::get('/unauthorized', function () {
 Route::get('/contacts/{id}', [ContactsController::class, "getContacts"]);
 Route::post("/login", [UserController:: class, "login"]);
 
-Route::post('/location', [LocationController::class, "create"]);
+Route::post('/location/{id}', [LocationController::class, "create"]);

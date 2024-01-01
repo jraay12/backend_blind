@@ -4,15 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Location;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 
 class LocationController extends Controller
 {
-    public function create(Request $request){
+    public function create(Request $request, $id){
+
+
+        $user = User::find($id);
+
+        if(!$user){
+            return response()->json(["message" => "User not Found"], 404);
+        }
 
         $validator=Validator::make($request->all(), [
-            "user_id" => "required",
             "latitude" => "required|string",
             "longitude" => "required|string",
 
@@ -26,7 +33,7 @@ class LocationController extends Controller
         
 
         $location = Location::create([
-            'user_id' => $request['user_id'],
+            'user_id' => $id,
             'latitude' => $request['latitude'],
             'longitude' => $request['longitude'],
             
