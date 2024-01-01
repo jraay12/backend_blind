@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactsController;
+use App\Http\Controllers\LocationController;
 use App\Http\Middleware\Permission;
 use App\Http\Middleware\UserPermission;
 
@@ -57,3 +58,5 @@ Route::get('/unauthorized', function () {
 
 Route::get('/contacts/{id}', [ContactsController::class, "getContacts"]);
 Route::post("/login", [UserController:: class, "login"]);
+
+Route::post('/location', [LocationController::class, "create"]);

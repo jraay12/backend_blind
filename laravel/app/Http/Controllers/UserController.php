@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Response;
 use App\Models\User;
 use App\Models\Address;
 use App\Models\Contacts;
@@ -120,7 +122,7 @@ class UserController extends Controller
         return response()->json(["message" => "User not Found"], 404);
     }
     $validator = Validator::make($request->all(), [
-        // Update validation rules based on fillable fields
+        
         'name' => 'nullable|string',
         'email' => 'nullable|email|unique:users,email,'.$user->id, // Ensure unique email excluding current user
         'password' => 'nullable|string|min:6',
@@ -173,5 +175,18 @@ class UserController extends Controller
         return response()->json([
             'User' => $userContactDetails
         ]);
+    }
+
+    public function sendResetLink(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? Response::json(['message' => __($status)], 200)
+            : Response::json(['error' => __($status)], 422);
     }
 }
