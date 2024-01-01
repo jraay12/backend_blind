@@ -42,4 +42,22 @@ class LocationController extends Controller
         return response()->json(['message' => 'successfully created'], 200);
 
     }
+
+    public function getLocation($id)
+{
+    $locations = Location::where('user_id', $id)->get();
+
+    if ($locations->isNotEmpty()) {
+        $data = $locations->map(function ($location) {
+            return [
+                'latitude' => $location->latitude,
+                'longitude' => $location->longitude,
+            ];
+        });
+
+        return response()->json($data);
+    } else {
+        return response()->json(['error' => 'Locations not found']);
+    }
+}
 }

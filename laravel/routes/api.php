@@ -31,15 +31,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::delete("/delete/{id}", [UserController::class, "destroy"]);
         Route::get("/user-contacts/{userId}", [UserController::class, "userContactsDetails"]);
         Route::patch("/update-user/{id}", [UserController::class, "update"]);
-
+        
      });
      Route::group(['middleware' => ['userPermission']], function(){
         Route::post("/add-contacts", [ContactsController::class, "contacts"]);
         Route::get("/contacts-details/{id}", [ContactsController::class, "contactDetails"]);
         Route::delete("/delete-contacts/{id}", [ContactsController::class, "destroy"]);
         Route::patch("/update-contacts/{id}", [ContactsController::class, "updateContacts"]);
-
-
+        Route::get('/get-location/{id}', [LocationController::class, "getLocation"]);
     });
 });
 
