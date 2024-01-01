@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ResetPasswordLink;
 use App\Models\User;
 use App\Models\Address;
 use App\Models\Contacts;
@@ -177,16 +179,25 @@ class UserController extends Controller
         ]);
     }
 
-    public function sendResetLink(Request $request)
+    public function sendResetLinkEmail(Request $request)
     {
         $request->validate(['email' => 'required|email']);
 
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        // Retrieve the user based on the email
+        $user = User::where('email', $request->email)->firstOrFail();
 
-        return $status === Password::RESET_LINK_SENT
-            ? Response::json(['message' => __($status)], 200)
-            : Response::json(['error' => __($status)], 422);
+
+        if (!$user) {
+            return response()->json(['message' => 'Email not found'], 404);
+        }
+
+        // Create a password reset token
+        $token = app('auth.password.broker')->createToken($user);
+
+
+        // Send password reset link via email
+        Mail::to($user->email)->send(new ResetPasswordLink($token));
+
+        return response()->json(['message' => 'Password reset link sent']);
     }
 }
