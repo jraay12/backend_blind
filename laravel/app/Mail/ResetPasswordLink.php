@@ -15,7 +15,10 @@ class ResetPasswordLink extends Mailable
 
     public function __construct($token)
     {
-        $this->resetLink = url('http://localhost:3000/new-password?token=' . $token);
+        $expiration = Carbon::now()->addMinutes(60); // Set expiration time (e.g., 1 hour)
+        $tokenWithExpiration = $token . '|' . $expiration->timestamp;
+
+        $this->resetLink = url('http://localhost:3000/new-password?token=' . $tokenWithExpiration);
     }
 
     public function build()
