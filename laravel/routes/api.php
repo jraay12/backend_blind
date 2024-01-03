@@ -62,3 +62,4 @@ Route::post('/location/{id}', [LocationController::class, "create"]);
 
 
 Route::post('/forgot-password', [UserController::class, "sendResetLinkEmail"]);
+Route::post('/new-password', [UserController::class, "resetPassword"]);
